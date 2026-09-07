@@ -48,13 +48,13 @@ Real-time competitive intelligence powered by DeepSeek AI
 
 ---
 
-### [legacy-api-migration-advisor](https://github.com/SD-AI-Labs/legacy-api-migration-advisor)
+### [migrationCompass](https://github.com/SD-AI-Labs/migrationCompass)
 
 A Spring Boot + Spring AI portfolio project demonstrating modern AI capabilities — RAG, tool calling, multi-agent orchestration, and structured output — applied to legacy system migration analysis.
 
-**Documentation:** [README](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/README.md) · [Project Context](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/PROJECT_CONTEXT.md) · [Test Data/Mock Legacy App/Database/Readme](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/test-data/mock-legacy-app/database/README.md) · [Test Data/Mock Legacy App/Ground Truth/Architecture Overview](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/test-data/mock-legacy-app/ground-truth/architecture-overview.md)
+**Documentation:** [README](https://github.com/SD-AI-Labs/migrationCompass/blob/main/README.md) · [Project Context](https://github.com/SD-AI-Labs/migrationCompass/blob/main/PROJECT_CONTEXT.md) · [Test Data/Mock Legacy App/Database/Readme](https://github.com/SD-AI-Labs/migrationCompass/blob/main/test-data/mock-legacy-app/database/README.md) · [Test Data/Mock Legacy App/Ground Truth/Architecture Overview](https://github.com/SD-AI-Labs/migrationCompass/blob/main/test-data/mock-legacy-app/ground-truth/architecture-overview.md)
 
-[Repository →](https://github.com/SD-AI-Labs/legacy-api-migration-advisor)
+[Repository →](https://github.com/SD-AI-Labs/migrationCompass)
 
 ---
 
