@@ -1,0 +1,135 @@
+name: Update Portfolio
+
+on:
+  workflow_dispatch:
+
+  schedule:
+    # Every day at 09:00 IST (03:30 UTC)
+    - cron: "30 3 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  update-portfolio:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout portfolio repository
+        uses: actions/checkout@v4
+
+      - name: Discover portfolio repositories
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            --paginate \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/orgs/SD-AI-Labs/repos?per_page=100&type=all" \
+            | jq -s 'add' > /tmp/all-repos.json
+
+          jq '
+            [
+              .[]
+              | select(.name != "portfolio")
+              | select(.archived == false)
+              | select((.topics // []) | index("portfolio"))
+            ]
+            | sort_by(.name | ascii_downcase)
+          ' /tmp/all-repos.json > /tmp/portfolio-repos.json
+
+          echo "Portfolio repositories:"
+          jq -r '.[].name' /tmp/portfolio-repos.json
+
+      - name: Generate portfolio section
+        run: |
+          python3 <<'PY'
+          import json
+          import re
+          from pathlib import Path
+
+          readme = Path("README.md")
+          repos_file = Path("/tmp/portfolio-repos.json")
+
+          repos = json.loads(repos_file.read_text())
+
+          lines = []
+
+          if not repos:
+              lines.extend([
+                  "_No repositories are tagged `portfolio` yet._",
+                  "",
+                  "Add the `portfolio` topic to a repository in the `SD-AI-Labs` organization, "
+                  "then run the **Update Portfolio** workflow manually or wait for the scheduled refresh.",
+              ])
+          else:
+              for repo in repos:
+                  name = repo["name"]
+                  url = repo["html_url"]
+                  description = repo.get("description") or "AI engineering project."
+
+                  topics = [
+                      topic
+                      for topic in (repo.get("topics") or [])
+                      if topic != "portfolio"
+                  ]
+
+                  lines.append(f"### [{name}]({url})")
+                  lines.append("")
+                  lines.append(description)
+                  lines.append("")
+
+                  if topics:
+                      topic_text = " · ".join(
+                          f"`{topic}`" for topic in topics[:8]
+                      )
+                      lines.append(f"**Topics:** {topic_text}")
+                      lines.append("")
+
+                  lines.append(f"[View Repository →]({url})")
+                  lines.append("")
+                  lines.append("---")
+                  lines.append("")
+
+          generated = "\n".join(lines).rstrip()
+
+          content = readme.read_text()
+
+          pattern = r"<!-- PORTFOLIO:START -->.*?<!-- PORTFOLIO:END -->"
+
+          replacement = (
+              "<!-- PORTFOLIO:START -->\n\n"
+              + generated
+              + "\n\n"
+              + "<!-- PORTFOLIO:END -->"
+          )
+
+          updated = re.sub(
+              pattern,
+              replacement,
+              content,
+              flags=re.DOTALL,
+          )
+
+          if updated == content:
+              raise SystemExit(
+                  "Could not find PORTFOLIO markers in README.md"
+              )
+
+          readme.write_text(updated)
+          PY
+
+      - name: Commit portfolio changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+
+          if git diff --cached --quiet; then
+            echo "No portfolio changes."
+            exit 0
+          fi
+
+          git commit -m "chore: update portfolio projects"
+          git push
