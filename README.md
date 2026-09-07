@@ -10,105 +10,81 @@ Independent AI engineering lab focused on building practical AI systems, LLM app
 
 ### [docrag-pro](https://github.com/SD-AI-Labs/docrag-pro)
 
-AI engineering project.
+Production-grade RAG with LlamaIndex, pgvector, hybrid search, citations, and evaluation.
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/docrag-pro/blob/main/README.md)
 
-- [README.md](https://github.com/SD-AI-Labs/docrag-pro/blob/main/README.md)
-- [data/uploads/architecture-overview.md](https://github.com/SD-AI-Labs/docrag-pro/blob/main/data/uploads/architecture-overview.md)
-- [data/uploads/dependency-graph.md](https://github.com/SD-AI-Labs/docrag-pro/blob/main/data/uploads/dependency-graph.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/docrag-pro)
+[Repository →](https://github.com/SD-AI-Labs/docrag-pro)
 
 ---
 
 ### [doctalk](https://github.com/SD-AI-Labs/doctalk)
 
-AI engineering project.
+Chat with your PDF using a lightweight RAG agent.
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/doctalk/blob/main/README.md)
 
-- [README.md](https://github.com/SD-AI-Labs/doctalk/blob/main/README.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/doctalk)
+[Repository →](https://github.com/SD-AI-Labs/doctalk)
 
 ---
 
 ### [graphforge](https://github.com/SD-AI-Labs/graphforge)
 
-AI engineering project.
+Deterministic multi-agent code review using graph engineering instead of loop engineering.
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/graphforge/blob/main/README.md)
 
-- [README.md](https://github.com/SD-AI-Labs/graphforge/blob/main/README.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/graphforge)
+[Repository →](https://github.com/SD-AI-Labs/graphforge)
 
 ---
 
 ### [intelli-market](https://github.com/SD-AI-Labs/intelli-market)
 
-AI engineering project.
+Real-time competitive intelligence powered by DeepSeek AI
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/intelli-market/blob/main/README.md) · [Workspace/Analysis/Analysis Summary](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/analysis/analysis_summary.md) · [Workspace/Strategy/Executive Summary](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/executive_summary.md) · [Workspace/Strategy/Presentation](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/presentation.md)
 
-- [README.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/README.md)
-- [workspace/analysis/analysis_summary.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/analysis/analysis_summary.md)
-- [workspace/strategy/executive_summary.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/executive_summary.md)
-- [workspace/strategy/presentation.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/presentation.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/intelli-market)
+[Repository →](https://github.com/SD-AI-Labs/intelli-market)
 
 ---
 
 ### [legacy-api-migration-advisor](https://github.com/SD-AI-Labs/legacy-api-migration-advisor)
 
-AI engineering project.
+A Spring Boot + Spring AI portfolio project demonstrating modern AI capabilities — RAG, tool calling, multi-agent orchestration, and structured output — applied to legacy system migration analysis.
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/README.md) · [Project Context](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/PROJECT_CONTEXT.md) · [Test Data/Mock Legacy App/Database/Readme](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/test-data/mock-legacy-app/database/README.md) · [Test Data/Mock Legacy App/Ground Truth/Architecture Overview](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/test-data/mock-legacy-app/ground-truth/architecture-overview.md)
 
-- [README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/README.md)
-- [node_modules/@babel/runtime/README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/node_modules/@babel/runtime/README.md)
-- [node_modules/@types/pako/README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/node_modules/@types/pako/README.md)
-- [node_modules/@types/raf/README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/node_modules/@types/raf/README.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/legacy-api-migration-advisor)
+[Repository →](https://github.com/SD-AI-Labs/legacy-api-migration-advisor)
 
 ---
 
 ### [pastedigest](https://github.com/SD-AI-Labs/pastedigest)
 
-AI engineering project.
+Structured text analysis using LLM JSON mode.
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/pastedigest/blob/main/README.md)
 
-- [README.md](https://github.com/SD-AI-Labs/pastedigest/blob/main/README.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/pastedigest)
+[Repository →](https://github.com/SD-AI-Labs/pastedigest)
 
 ---
 
 ### [sd-harness](https://github.com/SD-AI-Labs/sd-harness)
 
-AI engineering project.
+A lightweight, extensible AI agent runtime built from scratch in TypeScript.
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/sd-harness/blob/main/Readme.md)
 
-- [README.md](https://github.com/SD-AI-Labs/sd-harness/blob/main/Readme.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/sd-harness)
+[Repository →](https://github.com/SD-AI-Labs/sd-harness)
 
 ---
 
 ### [spendsight](https://github.com/SD-AI-Labs/spendsight)
 
-AI engineering project.
+A multi-agent personal expense analyzer built in 48 hours.
 
-**Project Documentation**
+**Documentation:** [README](https://github.com/SD-AI-Labs/spendsight/blob/main/README.md)
 
-- [README.md](https://github.com/SD-AI-Labs/spendsight/blob/main/README.md)
-
-[View Repository →](https://github.com/SD-AI-Labs/spendsight)
+[Repository →](https://github.com/SD-AI-Labs/spendsight)
 
 ---
 
