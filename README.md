@@ -12,6 +12,12 @@ Independent AI engineering lab focused on building practical AI systems, LLM app
 
 AI engineering project.
 
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/docrag-pro/blob/main/README.md)
+- [data/uploads/architecture-overview.md](https://github.com/SD-AI-Labs/docrag-pro/blob/main/data/uploads/architecture-overview.md)
+- [data/uploads/dependency-graph.md](https://github.com/SD-AI-Labs/docrag-pro/blob/main/data/uploads/dependency-graph.md)
+
 [View Repository →](https://github.com/SD-AI-Labs/docrag-pro)
 
 ---
@@ -19,6 +25,10 @@ AI engineering project.
 ### [doctalk](https://github.com/SD-AI-Labs/doctalk)
 
 AI engineering project.
+
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/doctalk/blob/main/README.md)
 
 [View Repository →](https://github.com/SD-AI-Labs/doctalk)
 
@@ -28,6 +38,10 @@ AI engineering project.
 
 AI engineering project.
 
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/graphforge/blob/main/README.md)
+
 [View Repository →](https://github.com/SD-AI-Labs/graphforge)
 
 ---
@@ -36,13 +50,39 @@ AI engineering project.
 
 AI engineering project.
 
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/README.md)
+- [workspace/analysis/analysis_summary.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/analysis/analysis_summary.md)
+- [workspace/strategy/executive_summary.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/executive_summary.md)
+- [workspace/strategy/presentation.md](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/presentation.md)
+
 [View Repository →](https://github.com/SD-AI-Labs/intelli-market)
+
+---
+
+### [legacy-api-migration-advisor](https://github.com/SD-AI-Labs/legacy-api-migration-advisor)
+
+AI engineering project.
+
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/README.md)
+- [node_modules/@babel/runtime/README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/node_modules/@babel/runtime/README.md)
+- [node_modules/@types/pako/README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/node_modules/@types/pako/README.md)
+- [node_modules/@types/raf/README.md](https://github.com/SD-AI-Labs/legacy-api-migration-advisor/blob/main/node_modules/@types/raf/README.md)
+
+[View Repository →](https://github.com/SD-AI-Labs/legacy-api-migration-advisor)
 
 ---
 
 ### [pastedigest](https://github.com/SD-AI-Labs/pastedigest)
 
 AI engineering project.
+
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/pastedigest/blob/main/README.md)
 
 [View Repository →](https://github.com/SD-AI-Labs/pastedigest)
 
@@ -52,6 +92,10 @@ AI engineering project.
 
 AI engineering project.
 
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/sd-harness/blob/main/Readme.md)
+
 [View Repository →](https://github.com/SD-AI-Labs/sd-harness)
 
 ---
@@ -59,6 +103,10 @@ AI engineering project.
 ### [spendsight](https://github.com/SD-AI-Labs/spendsight)
 
 AI engineering project.
+
+**Project Documentation**
+
+- [README.md](https://github.com/SD-AI-Labs/spendsight/blob/main/README.md)
 
 [View Repository →](https://github.com/SD-AI-Labs/spendsight)
 
