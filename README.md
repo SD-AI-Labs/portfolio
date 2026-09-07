@@ -8,9 +8,61 @@ Independent AI engineering lab focused on building practical AI systems, LLM app
 
 <!-- PORTFOLIO:START -->
 
-_No repositories are tagged `portfolio` yet._
+### [docrag-pro](https://github.com/SD-AI-Labs/docrag-pro)
 
-Add the `portfolio` topic to a repository in the `SD-AI-Labs` organization, then run the **Update Portfolio** workflow manually or wait for the scheduled refresh.
+AI engineering project.
+
+[View Repository →](https://github.com/SD-AI-Labs/docrag-pro)
+
+---
+
+### [doctalk](https://github.com/SD-AI-Labs/doctalk)
+
+AI engineering project.
+
+[View Repository →](https://github.com/SD-AI-Labs/doctalk)
+
+---
+
+### [graphforge](https://github.com/SD-AI-Labs/graphforge)
+
+AI engineering project.
+
+[View Repository →](https://github.com/SD-AI-Labs/graphforge)
+
+---
+
+### [intelli-market](https://github.com/SD-AI-Labs/intelli-market)
+
+AI engineering project.
+
+[View Repository →](https://github.com/SD-AI-Labs/intelli-market)
+
+---
+
+### [pastedigest](https://github.com/SD-AI-Labs/pastedigest)
+
+AI engineering project.
+
+[View Repository →](https://github.com/SD-AI-Labs/pastedigest)
+
+---
+
+### [sd-harness](https://github.com/SD-AI-Labs/sd-harness)
+
+AI engineering project.
+
+[View Repository →](https://github.com/SD-AI-Labs/sd-harness)
+
+---
+
+### [spendsight](https://github.com/SD-AI-Labs/spendsight)
+
+AI engineering project.
+
+[View Repository →](https://github.com/SD-AI-Labs/spendsight)
+
+---
 
 <!-- PORTFOLIO:END -->
 
