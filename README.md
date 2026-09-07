@@ -1,25 +1,33 @@
-SD-AI-Labs
-AI Engineering Portfolio
+# SD-AI-Labs
 
-Featured Projects
+Independent AI engineering lab focused on building practical AI systems, LLM applications, RAG, agents, machine learning, evaluation, and developer tooling.
 
-1. DocRAG Pro
-   RAG / LLM / Document Intelligence
-   → [View Repository →](https://github.com/SD-AI-Labs/docrag-pro)
+## Featured Projects
 
-2. GraphForge
-   Graph / AI
-   → [View Repository →](https://github.com/SD-AI-Labs/graphforge)
+> Projects are automatically discovered from repositories in `SD-AI-Labs` tagged with the **`portfolio`** topic.
 
-3. SD Harness
-   AI Engineering / Tooling
-   → [View Repository →](https://github.com/SD-AI-Labs/sd-harness)
+<!-- PORTFOLIO:START -->
 
-4. SpendSight
-   AI Application
-   → [View Repository →](https://github.com/SD-AI-Labs/spendsight)
+_No repositories are tagged `portfolio` yet._
 
-...
+Add the `portfolio` topic to a repository in the `SD-AI-Labs` organization, then run the **Update Portfolio** workflow manually or wait for the scheduled refresh.
 
-Skills
-Python | LLMs | RAG | Agents | MCP | FastAPI | ...# portfolio
+<!-- PORTFOLIO:END -->
+
+## Focus Areas
+
+- Large Language Model applications
+- Retrieval-Augmented Generation (RAG)
+- AI agents and tool use
+- Model evaluation and observability
+- Machine learning
+- AI developer tooling
+- Document intelligence
+
+## About
+
+This organization is a working portfolio of AI engineering projects, experiments, and reusable tools.
+
+---
+
+_This page is maintained automatically by GitHub Actions._
