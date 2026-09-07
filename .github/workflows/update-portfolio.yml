@@ -41,6 +41,92 @@ jobs:
           echo "Portfolio repositories:"
           jq -r '.[].name' /tmp/portfolio-repos.json
 
+      - name: Discover project documentation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 <<'PY'
+          import json
+          import os
+          import subprocess
+
+          repos = json.load(open("/tmp/portfolio-repos.json"))
+
+          for repo in repos:
+              name = repo["name"]
+
+              print(f"Discovering documentation for {name}...")
+
+              try:
+                  result = subprocess.run(
+                      [
+                          "gh",
+                          "api",
+                          f"/repos/SD-AI-Labs/{name}/git/trees/{repo['default_branch']}?recursive=1",
+                          "-H",
+                          "X-GitHub-Api-Version: 2022-11-28",
+                      ],
+                      capture_output=True,
+                      text=True,
+                      check=True,
+                  )
+
+                  tree = json.loads(result.stdout)
+
+              except Exception as e:
+                  print(f"Could not inspect {name}: {e}")
+                  repo["documentation"] = []
+                  continue
+
+              files = []
+
+              for item in tree.get("tree", []):
+                  if item.get("type") != "blob":
+                      continue
+
+                  path = item.get("path", "")
+
+                  if not path.lower().endswith(".md"):
+                      continue
+
+                  files.append(path)
+
+              # Documentation priority:
+              #
+              # 1. README.md
+              # 2. docs/*.md
+              # 3. Other markdown files
+              #
+              # Maximum 4 files.
+
+              def priority(path):
+                  lower = path.lower()
+
+                  if lower == "readme.md":
+                      return 0
+
+                  if lower.startswith("docs/"):
+                      return 1
+
+                  return 2
+
+              files.sort(key=lambda p: (priority(p), p.lower()))
+
+              repo["documentation"] = files[:4]
+
+          with open("/tmp/portfolio-repos-with-docs.json", "w") as f:
+              json.dump(repos, f, indent=2)
+
+          PY
+
+          echo ""
+          echo "Documentation discovered:"
+          jq -r '
+            .[] |
+            "===== \(.name) =====",
+            (.documentation[]? | "  - \(.)")
+          ' /tmp/portfolio-repos-with-docs.json
+
       - name: Generate portfolio section
         run: |
           python3 <<'PY'
@@ -49,24 +135,36 @@ jobs:
           from pathlib import Path
 
           readme = Path("README.md")
-          repos_file = Path("/tmp/portfolio-repos.json")
 
-          repos = json.loads(repos_file.read_text())
+          repos = json.loads(
+              Path("/tmp/portfolio-repos-with-docs.json").read_text()
+          )
 
           lines = []
 
           if not repos:
+
               lines.extend([
                   "_No repositories are tagged `portfolio` yet._",
                   "",
-                  "Add the `portfolio` topic to a repository in the `SD-AI-Labs` organization, "
-                  "then run the **Update Portfolio** workflow manually or wait for the scheduled refresh.",
+                  "Add the `portfolio` topic to a repository in the "
+                  "`SD-AI-Labs` organization, then run the "
+                  "**Update Portfolio** workflow manually or wait for "
+                  "the scheduled refresh."
               ])
+
           else:
+
               for repo in repos:
+
                   name = repo["name"]
                   url = repo["html_url"]
-                  description = repo.get("description") or "AI engineering project."
+                  branch = repo["default_branch"]
+
+                  description = (
+                      repo.get("description")
+                      or "AI engineering project."
+                  )
 
                   topics = [
                       topic
@@ -81,12 +179,45 @@ jobs:
 
                   if topics:
                       topic_text = " · ".join(
-                          f"`{topic}`" for topic in topics[:8]
+                          f"`{topic}`"
+                          for topic in topics[:8]
                       )
+
                       lines.append(f"**Topics:** {topic_text}")
                       lines.append("")
 
-                  lines.append(f"[View Repository →]({url})")
+                  documentation = repo.get("documentation", [])
+
+                  if documentation:
+
+                      lines.append("**Project Documentation**")
+                      lines.append("")
+
+                      for path in documentation:
+
+                          file_url = (
+                              f"https://github.com/SD-AI-Labs/"
+                              f"{name}/blob/{branch}/{path}"
+                          )
+
+                          # Friendly display names
+
+                          if path.lower() == "readme.md":
+                              display_name = "README.md"
+
+                          else:
+                              display_name = path
+
+                          lines.append(
+                              f"- [{display_name}]({file_url})"
+                          )
+
+                      lines.append("")
+
+                  lines.append(
+                      f"[View Repository →]({url})"
+                  )
+
                   lines.append("")
                   lines.append("---")
                   lines.append("")
@@ -95,7 +226,11 @@ jobs:
 
           content = readme.read_text()
 
-          pattern = r"<!-- PORTFOLIO:START -->.*?<!-- PORTFOLIO:END -->"
+          pattern = (
+              r"<!-- PORTFOLIO:START -->"
+              r".*?"
+              r"<!-- PORTFOLIO:END -->"
+          )
 
           replacement = (
               "<!-- PORTFOLIO:START -->\n\n"
@@ -117,7 +252,13 @@ jobs:
               )
 
           readme.write_text(updated)
+
           PY
+
+      - name: Show generated README
+        run: |
+          echo "===== Generated Portfolio ====="
+          sed -n '/<!-- PORTFOLIO:START -->/,/<!-- PORTFOLIO:END -->/p' README.md
 
       - name: Commit portfolio changes
         run: |
