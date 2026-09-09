@@ -8,6 +8,18 @@ Independent AI engineering lab focused on building practical AI systems, LLM app
 
 <!-- PORTFOLIO:START -->
 
+### [docrag](https://github.com/SD-AI-Labs/docrag)
+
+Local semantic document search using sentence-transformers + ChromaDB + Streamlit.
+
+`chromadb` `rag` `streamlit`
+
+**Documentation:** [README](https://github.com/SD-AI-Labs/docrag/blob/main/README.md)
+
+[Repository →](https://github.com/SD-AI-Labs/docrag)
+
+---
+
 ### [docrag-pro](https://github.com/SD-AI-Labs/docrag-pro)
 
 Production-grade RAG with LlamaIndex, pgvector, hybrid search, citations, and evaluation.
@@ -32,6 +44,8 @@ Chat with your PDF using a lightweight RAG agent.
 
 Deterministic multi-agent code review using graph engineering instead of loop engineering.
 
+`graph-engineering` `multi-agent`
+
 **Documentation:** [README](https://github.com/SD-AI-Labs/graphforge/blob/main/README.md)
 
 [Repository →](https://github.com/SD-AI-Labs/graphforge)
@@ -41,6 +55,8 @@ Deterministic multi-agent code review using graph engineering instead of loop en
 ### [intelli-market](https://github.com/SD-AI-Labs/intelli-market)
 
 Real-time competitive intelligence powered by DeepSeek AI
+
+`agentic-ai` `agentic-workflow`
 
 **Documentation:** [README](https://github.com/SD-AI-Labs/intelli-market/blob/main/README.md) · [Workspace/Analysis/Analysis Summary](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/analysis/analysis_summary.md) · [Workspace/Strategy/Executive Summary](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/executive_summary.md) · [Workspace/Strategy/Presentation](https://github.com/SD-AI-Labs/intelli-market/blob/main/workspace/strategy/presentation.md)
 
@@ -72,7 +88,9 @@ Structured text analysis using LLM JSON mode.
 
 A lightweight, extensible AI agent runtime built from scratch in TypeScript.
 
-**Documentation:** [README](https://github.com/SD-AI-Labs/sd-harness/blob/main/Readme.md)
+`harness-ai` `harness-engineering` `harness-framework` `typescript`
+
+**Documentation:** [README](https://github.com/SD-AI-Labs/sd-harness/blob/main/Readme.md) · [Project State](https://github.com/SD-AI-Labs/sd-harness/blob/main/PROJECT_STATE.md) · [Todo](https://github.com/SD-AI-Labs/sd-harness/blob/main/TODO.md)
 
 [Repository →](https://github.com/SD-AI-Labs/sd-harness)
 
@@ -81,6 +99,8 @@ A lightweight, extensible AI agent runtime built from scratch in TypeScript.
 ### [spendsight](https://github.com/SD-AI-Labs/spendsight)
 
 A multi-agent personal expense analyzer built in 48 hours.
+
+`multi-agent`
 
 **Documentation:** [README](https://github.com/SD-AI-Labs/spendsight/blob/main/README.md)
 
