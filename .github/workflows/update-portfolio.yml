@@ -18,6 +18,9 @@ jobs:
       - name: Checkout portfolio repository
         uses: actions/checkout@v4
 
+      # ------------------------------------------------------------
+      # Discover repositories tagged with "portfolio"
+      # ------------------------------------------------------------
       - name: Discover portfolio repositories
         env:
           GH_TOKEN: ${{ github.token }}
@@ -41,11 +44,15 @@ jobs:
           echo "Portfolio repositories:"
           jq -r '.[].name' /tmp/portfolio-repos.json
 
+      # ------------------------------------------------------------
+      # Read README descriptions and discover useful documentation
+      # ------------------------------------------------------------
       - name: Collect project information
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 <<'PY'
+          import base64
           import json
           import re
           import subprocess
@@ -54,6 +61,7 @@ jobs:
           repos = json.loads(
               Path("/tmp/portfolio-repos.json").read_text()
           )
+
 
           def gh_api(endpoint):
               result = subprocess.run(
@@ -69,6 +77,8 @@ jobs:
               )
 
               if result.returncode != 0:
+                  print(f"GitHub API failed: {endpoint}")
+                  print(result.stderr)
                   return None
 
               try:
@@ -76,23 +86,41 @@ jobs:
               except json.JSONDecodeError:
                   return None
 
+
           def clean_markdown(text):
               if not text:
                   return ""
 
               # Remove HTML comments
-              text = re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL)
+              text = re.sub(
+                  r"<!--.*?-->",
+                  "",
+                  text,
+                  flags=re.DOTALL
+              )
 
               # Remove markdown images
-              text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", text)
+              text = re.sub(
+                  r"!\[[^\]]*\]\([^)]*\)",
+                  "",
+                  text
+              )
 
               # Convert markdown links to their text
-              text = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", text)
+              text = re.sub(
+                  r"\[([^\]]+)\]\([^)]*\)",
+                  r"\1",
+                  text
+              )
 
-              # Remove headings
-              text = re.sub(r"^\s*#+\s*", "", text)
+              # Remove markdown headings
+              text = re.sub(
+                  r"^\s*#+\s*",
+                  "",
+                  text
+              )
 
-              # Remove code formatting
+              # Remove inline code formatting
               text = text.replace("`", "")
 
               # Remove emphasis
@@ -100,18 +128,25 @@ jobs:
               text = text.replace("__", "")
 
               # Collapse whitespace
-              text = re.sub(r"\s+", " ", text)
+              text = re.sub(
+                  r"\s+",
+                  " ",
+                  text
+              )
 
               return text.strip()
 
+
           def extract_description(readme):
+              """
+              Extract the first meaningful paragraph from README.md.
+              """
+
               if not readme:
                   return ""
 
               lines = readme.splitlines()
 
-              # Remove badges/images/comments and find the first
-              # meaningful paragraph after the title.
               paragraphs = []
               current = []
 
@@ -119,26 +154,32 @@ jobs:
 
               for line in lines:
 
-                  if line.strip().startswith("```"):
+                  stripped = line.strip()
+
+                  # Code blocks
+                  if stripped.startswith("```"):
                       inside_code = not inside_code
                       continue
 
                   if inside_code:
                       continue
 
-                  stripped = line.strip()
-
+                  # Paragraph boundary
                   if not stripped:
+
                       if current:
-                          paragraphs.append(" ".join(current))
+                          paragraphs.append(
+                              " ".join(current)
+                          )
                           current = []
+
                       continue
 
                   # Ignore headings
                   if stripped.startswith("#"):
                       continue
 
-                  # Ignore images/badges
+                  # Ignore markdown images
                   if stripped.startswith("!["):
                       continue
 
@@ -146,81 +187,114 @@ jobs:
                   if stripped.startswith("<"):
                       continue
 
+                  # Ignore badges
+                  if (
+                      stripped.startswith("[![")
+                      or "shields.io" in stripped.lower()
+                  ):
+                      continue
+
                   current.append(stripped)
 
               if current:
-                  paragraphs.append(" ".join(current))
+                  paragraphs.append(
+                      " ".join(current)
+                  )
 
-              # Find first meaningful paragraph.
+              # Find first useful paragraph
               for paragraph in paragraphs:
 
-                  paragraph = clean_markdown(paragraph)
+                  paragraph = clean_markdown(
+                      paragraph
+                  )
 
                   if len(paragraph) < 30:
                       continue
 
-                  # Ignore common README boilerplate
                   lower = paragraph.lower()
 
-                  if lower.startswith("table of contents"):
+                  # Ignore common README sections
+                  ignored_starts = (
+                      "table of contents",
+                      "installation",
+                      "usage",
+                      "features",
+                      "getting started",
+                      "quick start",
+                      "requirements",
+                  )
+
+                  if lower.startswith(
+                      ignored_starts
+                  ):
                       continue
 
-                  if lower.startswith("installation"):
-                      continue
-
-                  if lower.startswith("usage"):
-                      continue
-
-                  if lower.startswith("features"):
-                      continue
-
-                  # Limit description length
+                  # Keep descriptions concise
                   if len(paragraph) > 280:
-                      paragraph = paragraph[:277].rstrip() + "..."
+                      paragraph = (
+                          paragraph[:277].rstrip()
+                          + "..."
+                      )
 
                   return paragraph
 
               return ""
 
+
           def documentation_priority(path):
+              """
+              Lower number = higher priority.
+              """
 
               lower = path.lower()
 
-              # Highest priority
+              # README is always highest priority
               if lower == "readme.md":
                   return 0
 
-              # Standard root documentation
-              root_names = {
-                  "architecture.md",
-                  "design.md",
-                  "api.md",
-                  "evaluation.md",
-                  "deployment.md",
-                  "usage.md",
-                  "documentation.md",
-                  "overview.md",
+              # Important root-level docs
+              root_priority = {
+                  "architecture.md": 1,
+                  "design.md": 1,
+                  "overview.md": 1,
+                  "project_context.md": 1,
+                  "documentation.md": 1,
+                  "api.md": 1,
+                  "evaluation.md": 1,
+                  "deployment.md": 1,
+                  "usage.md": 1,
               }
 
-              if "/" not in lower and lower in root_names:
-                  return 1
+              filename = lower.split("/")[-1]
 
-              # Documentation directory
-              if lower.startswith("docs/"):
-                  return 2
+              if "/" not in lower:
+                  return root_priority.get(
+                      filename,
+                      2
+                  )
 
-              # Everything else
-              return 3
+              # docs/ files
+              if (
+                  lower.startswith("docs/")
+                  and lower.count("/") == 1
+              ):
+                  return 3
+
+              return 4
+
 
           for repo in repos:
 
               name = repo["name"]
               branch = repo["default_branch"]
 
-              print(f"\n===== {name} =====")
+              print()
+              print(
+                  f"===== {name} ====="
+              )
 
               # --------------------------------------------------
-              # Get README
+              # README
               # --------------------------------------------------
 
               readme = gh_api(
@@ -229,31 +303,43 @@ jobs:
 
               description = ""
 
-              if readme and readme.get("content"):
-
-                  import base64
+              if (
+                  readme
+                  and readme.get("content")
+              ):
 
                   try:
                       content = base64.b64decode(
                           readme["content"]
-                      ).decode("utf-8", errors="ignore")
+                      ).decode(
+                          "utf-8",
+                          errors="ignore"
+                      )
 
-                      description = extract_description(content)
+                      description = (
+                          extract_description(
+                              content
+                          )
+                      )
 
-                  except Exception:
-                      pass
+                  except Exception as exc:
+                      print(
+                          f"README parsing failed: {exc}"
+                      )
 
-              # Fallback to GitHub repository description
+              # Fallback to GitHub description
               if not description:
                   description = (
                       repo.get("description")
                       or "AI engineering project."
                   )
 
-              repo["portfolio_description"] = description
+              repo[
+                  "portfolio_description"
+              ] = description
 
               # --------------------------------------------------
-              # Find documentation files
+              # Repository tree
               # --------------------------------------------------
 
               tree = gh_api(
@@ -265,35 +351,61 @@ jobs:
 
               if tree:
 
-                  for item in tree.get("tree", []):
+                  for item in tree.get(
+                      "tree",
+                      []
+                  ):
 
                       if item.get("type") != "blob":
                           continue
 
-                      path = item.get("path", "")
-
-                      if not path.lower().endswith(".md"):
-                          continue
+                      path = item.get(
+                          "path",
+                          ""
+                      )
 
                       lower = path.lower()
 
-                      # Ignore generated/data/source markdown
-                      ignored_prefixes = (
-                          "data/",
-                          "uploads/",
-                          "generated/",
-                          "build/",
-                          "dist/",
-                          "node_modules/",
-                          "vendor/",
-                          "examples/",
-                      )
-
-                      if lower.startswith(ignored_prefixes):
+                      # Markdown only
+                      if not lower.endswith(".md"):
                           continue
 
-                      documentation.append(path)
+                      # ------------------------------------------------
+                      # README
+                      # ------------------------------------------------
 
+                      if lower == "readme.md":
+                          documentation.append(
+                              path
+                          )
+                          continue
+
+                      # ------------------------------------------------
+                      # Root-level documentation
+                      # ------------------------------------------------
+
+                      if "/" not in path:
+                          documentation.append(
+                              path
+                          )
+                          continue
+
+                      # ------------------------------------------------
+                      # Direct docs/ files only
+                      #
+                      # docs/foo.md       -> include
+                      # docs/foo/bar.md   -> ignore
+                      # ------------------------------------------------
+
+                      if (
+                          lower.startswith("docs/")
+                          and lower.count("/") == 1
+                      ):
+                          documentation.append(
+                              path
+                          )
+
+              # Sort by documentation importance
               documentation.sort(
                   key=lambda p: (
                       documentation_priority(p),
@@ -301,26 +413,42 @@ jobs:
                   )
               )
 
-              # Maximum 4 documents
-              repo["documentation"] = documentation[:4]
-
-              print(
-                  f"Description: {description}"
+              # Maximum 4 documentation files
+              repo["documentation"] = (
+                  documentation[:4]
               )
 
-              print("Documentation:")
+              print(
+                  "Description:",
+                  description
+              )
 
-              for path in repo["documentation"]:
-                  print(f"  - {path}")
+              print(
+                  "Documentation:"
+              )
+
+              for path in repo[
+                  "documentation"
+              ]:
+                  print(
+                      f"  - {path}"
+                  )
+
 
           Path(
               "/tmp/portfolio-repos-final.json"
           ).write_text(
-              json.dumps(repos, indent=2)
+              json.dumps(
+                  repos,
+                  indent=2
+              )
           )
 
           PY
 
+      # ------------------------------------------------------------
+      # Generate README
+      # ------------------------------------------------------------
       - name: Generate portfolio section
         run: |
           python3 <<'PY'
@@ -331,7 +459,9 @@ jobs:
           readme = Path("README.md")
 
           repos = json.loads(
-              Path("/tmp/portfolio-repos-final.json").read_text()
+              Path(
+                  "/tmp/portfolio-repos-final.json"
+              ).read_text()
           )
 
           lines = []
@@ -341,8 +471,8 @@ jobs:
               lines.extend([
                   "_No repositories are tagged `portfolio` yet._",
                   "",
-                  "Add the `portfolio` topic to a repository in "
-                  "`SD-AI-Labs` and it will appear here automatically."
+                  "Add the `portfolio` topic to a repository "
+                  "in `SD-AI-Labs` and it will appear here automatically."
               ])
 
           else:
@@ -351,30 +481,49 @@ jobs:
 
                   name = repo["name"]
                   url = repo["html_url"]
-                  branch = repo["default_branch"]
+                  branch = repo[
+                      "default_branch"
+                  ]
 
                   description = (
-                      repo.get("portfolio_description")
+                      repo.get(
+                          "portfolio_description"
+                      )
                       or "AI engineering project."
                   )
 
                   topics = [
                       topic
-                      for topic in (repo.get("topics") or [])
+                      for topic in (
+                          repo.get("topics") or []
+                      )
                       if topic != "portfolio"
                   ]
 
+                  # ------------------------------------------------
                   # Project title
+                  # ------------------------------------------------
+
                   lines.append(
                       f"### [{name}]({url})"
                   )
+
                   lines.append("")
 
+                  # ------------------------------------------------
                   # Description
-                  lines.append(description)
+                  # ------------------------------------------------
+
+                  lines.append(
+                      description
+                  )
+
                   lines.append("")
 
+                  # ------------------------------------------------
                   # Topics
+                  # ------------------------------------------------
+
                   if topics:
 
                       topic_text = " ".join(
@@ -382,48 +531,75 @@ jobs:
                           for topic in topics[:8]
                       )
 
-                      lines.append(topic_text)
+                      lines.append(
+                          topic_text
+                      )
+
                       lines.append("")
 
-                  # Documentation
-                  documentation = repo.get(
-                      "documentation", []
-                  )
+                  # ------------------------------------------------
+                  # Additional documentation
+                  #
+                  # README is not shown here because the description
+                  # already comes from README.md.
+                  # ------------------------------------------------
 
-                  if documentation:
+                  additional_docs = [
+                      path
+                      for path in repo.get(
+                          "documentation",
+                          []
+                      )
+                      if path.lower()
+                      != "readme.md"
+                  ]
+
+                  if additional_docs:
 
                       links = []
 
-                      for path in documentation:
+                      for path in additional_docs:
 
                           file_url = (
-                              f"https://github.com/"
-                              f"SD-AI-Labs/{name}/blob/"
-                              f"{branch}/{path}"
+                              "https://github.com/"
+                              "SD-AI-Labs/"
+                              f"{name}/blob/"
+                              f"{branch}/"
+                              f"{path}"
                           )
 
                           lower = path.lower()
 
-                          if lower == "readme.md":
-                              label = "README"
-
-                          elif lower.startswith("docs/"):
-                              label = path[5:].replace(
-                                  ".md", ""
-                              ).replace(
-                                  "-", " "
-                              ).replace(
-                                  "_", " "
-                              ).title()
+                          if lower.startswith(
+                              "docs/"
+                          ):
+                              label = path[
+                                  5:
+                              ]
 
                           else:
-                              label = path.replace(
-                                  ".md", ""
-                              ).replace(
-                                  "-", " "
-                              ).replace(
-                                  "_", " "
-                              ).title()
+                              label = path
+
+                          label = (
+                              label
+                              .replace(
+                                  ".md",
+                                  ""
+                              )
+                              .replace(
+                                  "-",
+                                  " "
+                              )
+                              .replace(
+                                  "_",
+                                  " "
+                              )
+                              .replace(
+                                  "/",
+                                  " / "
+                              )
+                              .title()
+                          )
 
                           links.append(
                               f"[{label}]({file_url})"
@@ -433,17 +609,27 @@ jobs:
                           "**Documentation:** "
                           + " · ".join(links)
                       )
+
                       lines.append("")
+
+                  # ------------------------------------------------
+                  # Repository
+                  # ------------------------------------------------
 
                   lines.append(
                       f"[Repository →]({url})"
                   )
 
                   lines.append("")
+
                   lines.append("---")
+
                   lines.append("")
 
-          generated = "\n".join(lines).rstrip()
+
+          generated = "\n".join(
+              lines
+          ).rstrip()
 
           content = readme.read_text()
 
@@ -464,7 +650,7 @@ jobs:
               pattern,
               replacement,
               content,
-              flags=re.DOTALL,
+              flags=re.DOTALL
           )
 
           if updated == content:
@@ -472,10 +658,15 @@ jobs:
                   "Could not find PORTFOLIO markers in README.md"
               )
 
-          readme.write_text(updated)
+          readme.write_text(
+              updated
+          )
 
           PY
 
+      # ------------------------------------------------------------
+      # Commit only if README changed
+      # ------------------------------------------------------------
       - name: Commit portfolio changes
         run: |
           git config user.name "github-actions[bot]"
@@ -488,5 +679,7 @@ jobs:
             exit 0
           fi
 
-          git commit -m "chore: update portfolio projects"
+          git commit \
+            -m "chore: update portfolio projects"
+
           git push
