@@ -56,9 +56,9 @@ Real-time competitive intelligence powered by DeepSeek AI
 
 ### [migrationCompass](https://github.com/SD-AI-Labs/migrationCompass)
 
-A Spring Boot + Spring AI portfolio project demonstrating modern AI capabilities — RAG, tool calling, multi-agent orchestration, and structured output — applied to legacy system migration analysis.
+This repo is mid-rewrite. What's here now is V1 (Java / Spring Boot / Spring AI) — fully working, documented, and preserved as-is. V2 (a product rethink, new stack) is planned but not yet built.
 
-**Documentation:** [Project Context](https://github.com/SD-AI-Labs/migrationCompass/blob/main/PROJECT_CONTEXT.md)
+**Documentation:** [Project Plan V2](https://github.com/SD-AI-Labs/migrationCompass/blob/main/PROJECT_PLAN_V2.md) · [Project Status](https://github.com/SD-AI-Labs/migrationCompass/blob/main/PROJECT_STATUS.md)
 
 [Repository →](https://github.com/SD-AI-Labs/migrationCompass)
 
